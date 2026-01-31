@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>For My Cutie ❤️</title>
+
+    <meta property="og:title" content="A Surprise For You" />
+    <meta property="og:description" content="Just a little something..." />
+    <meta property="og:image" content="https://i.ibb.co/k6xD4nM/New-Project.jpg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Love+Light&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --bg-gradient: radial-gradient(circle at center, #fff9fb 0%, #fff0f4 100%);
+        --primary-color: #b76e79;
+        --secondary-color: #d8aeb7;
+        --text-color: #5d4037;
+        --white-glass: rgba(255, 255, 255, 0.7);
+        --glass-border: rgba(255, 255, 255, 0.8);
+        --shadow: 0 10px 30px rgba(183, 110, 121, 0.15);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        height: 100vh;
+        width: 100vw;
+      }
+
+      body {
+        background: var(--bg-gradient);
+        font-family: "Lato", sans-serif;
+        color: var(--text-color);
+      }
+
+      #balloon-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 20;
+        overflow: hidden;
+        display: flex;
+        justify-content: center;
+        padding-top: 100px;
+      }
+
+      .instruction-text {
+        font-family: "Love Light";
+        font-size: 40px;
+        color: var(--primary-color);
+        text-align: center;
+        z-index: 10;
+        pointer-events: none;
+        text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
+        letter-spacing: 1px;
+        line-height: 1.2;
+        opacity: 0;
+        animation: fadeInSlow 3s ease-out forwards;
+        margin-top: 20px;
+      }
+
+      .balloon {
+        position: absolute;
+        bottom: -150px;
+        width: 100px;
+        height: 120px;
+        background-color: var(--primary-color);
+        border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+        cursor: pointer;
+        opacity: 0.95;
+        box-shadow: inset -10px -10px 20px rgba(0, 0, 0, 0.05), 5px 10px 15px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: transform 0.2s ease, opacity 0.2s;
+        z-index: 25;
+        animation-name: floatUp;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+      }
+
+      .balloon:hover {
+        transform: scale(1.05);
+      }
+
+      .balloon:active {
+        transform: scale(0.95);
+      }
+
+      .balloon::after {
+        content: "";
+        position: absolute;
+        bottom: -30px;
+        left: 50%;
+        width: 1px;
+        height: 30px;
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .balloon::before {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-bottom: 8px solid var(--primary-color);
+      }
+
+      .glass-card {
+        background: var(--white-glass);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid var(--glass-border);
+        border-radius: 24px;
+        padding: 40px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        max-width: 90%;
+      }
+
+      #reason-modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.2);
+        backdrop-filter: blur(4px);
+        z-index: 30;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .reason-text {
+        font-family: "Playfair Display", serif;
+        font-size: 28px;
+        color: var(--text-color);
+        margin-bottom: 30px;
+        font-style: italic;
+      }
+
+      #main-proposal {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        width: 100%;
+        opacity: 0;
+        transition: opacity 1.5s ease;
+        position: absolute;
+        top: 0;
+        z-index: 40;
+      }
+
+      .headerText {
+        font-family: "Love Light", serif;
+        font-size: 36px;
+        margin-bottom: 25px;
+        color: var(--primary-color);
+        text-align: center;
+        padding: 0 20px;
+      }
+
+      .image-frame {
+        background: white;
+        padding: 12px 12px 40px 12px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        transform: rotate(-3deg);
+        transition: transform 0.4s ease;
+        margin-bottom: 30px;
+      }
+
+      .image-frame:hover {
+        transform: rotate(0deg) scale(1.02);
+      }
+
+      .image {
+        height: 250px;
+        width: 250px;
+        object-fit: cover;
+        display: block;
+      }
+
+      .flex {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .button {
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 35px;
+        border-radius: 50px;
+        font-family: "Lato", sans-serif;
+        font-size: 16px;
+        letter-spacing: 1px;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(183, 110, 121, 0.4);
+        transition: all 0.3s ease;
+      }
+
+      .button:hover {
+        background-color: #a05a65;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(183, 110, 121, 0.5);
+      }
+
+      .model {
+        position: fixed;
+        inset: 0;
+        display: none;
+        background: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(8px);
+        z-index: 50;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .model-content {
+        background: white;
+        padding: 30px;
+        border-radius: 20px;
+        width: 400px;
+        max-width: 90%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+
+      .modelImg {
+        max-height: 200px;
+        width: 100%;
+        object-fit: contain;
+      }
+
+      .modelText {
+        font-family: "Playfair Display", serif;
+        font-size: 24px;
+        text-align: center;
+      }
+
+      #stack-container {
+        position: relative;
+        width: 300px;
+        height: 350px;
+        margin-bottom: 20px;
+      }
+
+      .polaroid {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        padding: 15px 15px 50px 15px;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        border-radius: 4px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .polaroid img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+      }
+
+      .polaroid:nth-child(1) {
+        transform: rotate(-2deg);
+        z-index: 1;
+      }
+
+      .polaroid:nth-child(2) {
+        transform: rotate(3deg);
+        z-index: 2;
+      }
+
+      .polaroid:nth-child(3) {
+        transform: rotate(-4deg);
+        z-index: 3;
+      }
+
+      .polaroid:nth-child(4) {
+        transform: rotate(2deg);
+        z-index: 4;
+      }
+
+      .polaroid:nth-child(5) {
+        transform: rotate(-3deg);
+        z-index: 5;
+      }
+
+      #final-btn {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(20px);
+        transition: all 1s ease;
+      }
+
+      #final-btn.show {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+
+      .polaroid:hover {
+        transform: scale(1.02) rotate(0deg) !important;
+        z-index: 10;
+      }
+
+      .fly-away {
+        animation: slideOut 0.8s ease-out forwards !important;
+        pointer-events: none;
+      }
+
+      @keyframes slideOut {
+        to {
+          transform: translateX(400px) rotate(10deg);
+          opacity: 0;
+        }
+      }
+
+      #toast {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: rgba(60, 60, 60, 0.9);
+        color: #fff;
+        text-align: center;
+        border-radius: 50px;
+        padding: 16px;
+        position: fixed;
+        z-index: 100;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+      }
+
+      #toast.show {
+        visibility: visible;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+      }
+
+      .footer {
+        position: fixed;
+        bottom: 10px;
+        right: 20px;
+        font-size: 12px;
+        opacity: 0.6;
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) rotate(0deg);
+        }
+
+        50% {
+          transform: translateY(-50vh) rotate(5deg);
+        }
+
+        100% {
+          transform: translateY(-140vh) rotate(-5deg);
+        }
+      }
+
+      @keyframes fadeInSlow {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadein {
+        from {
+          bottom: 0;
+          opacity: 0;
+        }
+
+        to {
+          bottom: 40px;
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeout {
+        from {
+          bottom: 40px;
+          opacity: 1;
+        }
+
+        to {
+          bottom: 0;
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div id="balloon-container">
+      <div class="instruction-text">
+        ... Meow Challenge ... <br />
+        Can you pop all these balloons?
+      </div>
+    </div>
+
+    <div id="reason-modal">
+      <div class="glass-card">
+        <div class="reason-text" id="reason-content">...</div>
+        <button class="button" onclick="closeReason()">Meowww...</button>
+      </div>
+    </div>
+
+    <div id="main-proposal">
+      <h1 class="headerText" id="wedate">Will you be my valentine meoww? 🥺</h1>
+
+      <div class="image-frame">
+        <img id="mainImg" class="image" src="https://github.com/NikhilMarko03/resources/blob/main/happy1.gif?raw=true" />
+      </div>
+
+      <div class="flex" id="btns">
+        <button class="button" onmouseenter="happy()" onmouseleave="normal()" onclick="yes()">Yes 😽</button>
+        <button class="button" onmouseenter="angry()" onmouseleave="normal()" onclick="maybe()">Maybe 👀</button>
+        <button class="button" onmouseenter="angry()" onmouseleave="normal()" onclick="no()">No 😭</button>
+      </div>
+
+      <div class="footer">Made with ❤️ by your meoww 🐱</div>
+    </div>
+
+    <div id="model" class="model">
+      <div class="model-content">
+        <p class="modelText" id="modelText">Please</p>
+        <img class="modelImg" id="modelImg" />
+        <div class="flex" id="modal-btn-container">
+          <button class="button" onclick="yes()">Yes 😽</button>
+          <button class="button" onclick="no()">No 😭</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="model2" class="model">
+      <div class="model-content">
+        <p class="modelText">Can't believe this absolute beauty said yes 🥺😭</p>
+
+        <div id="stack-container">
+
+          <div class="polaroid">
+            <img src="assets/yes_meow.png" />
+          </div>
+
+          <div class="polaroid" onclick="fly(this)">
+            <img src="assets/super-pretty.jpeg" />
+          </div>
+
+          <div class="polaroid" onclick="fly(this)">
+            <img src="assets/super-gorgeous.jpeg" />
+          </div>
+
+          <div class="polaroid" onclick="fly(this)">
+            <img src="assets/gorgeous.jpeg" />
+          </div>
+
+          <div class="polaroid" onclick="fly(this)">
+            <img src="assets/pretty.jpeg" />
+          </div>
+
+        </div>
+
+        <button id="final-btn" class="button" onclick="ly2()">Don't make me regret it 👀🥰</button>
+      </div>
+    </div>
+
+    <div id="toast">
+    </div>
+
+    <script>
+      const reasons = [
+        "I still can't believe how beautiful you look!",
+        "My no make-up effortlessly gorgeous meow ❤️",
+        "I love the way you say 'heinnnnn'",
+        "I love how perfect your height is",
+        "I love how perfectly you fit in my arms",
+        "I love how hardworking you are!",
+        "YOU INSPIRE ME MEOWWWWWWWW 🥺",
+        "So, I have got one question for you ..."
+      ];
+
+      const colors = ["#b76e79", "#d8aeb7", "#eac4d5", "#c8a2c8", "#e6c2bf"];
+
+      const sadCat = [
+        "https://media1.tenor.com/images/9413ffc5a11722a3cc456a88810750bd/tenor.gif",
+        "https://emoji.gg/assets/emoji/5228_cat_cri.gif",
+        "https://media3.giphy.com/media/qpCvOBBmBkble/giphy.gif"
+      ];
+
+      const blackmail = ["Please...", "I'm begging you...", "Meow meowwww :(", "Aisa matt karo naaaa!!"];
+
+      const suspiciousCat = [
+        "https://media.giphy.com/media/ANbD1CCdA3iI8/giphy.gif",
+        "https://media.giphy.com/media/3gNotAoIRZsb9UHPnj/giphy.gif"
+      ];
+
+      let poppedCount = 0;
+      let currentReasonIndex = 0;
+      const balloonContainer = document.getElementById("balloon-container");
+      const reasonModal = document.getElementById("reason-modal");
+      const reasonContent = document.getElementById("reason-content");
+      const mainProposal = document.getElementById("main-proposal");
+
+      function createBalloons() {
+        reasons.forEach((_, index) => {
+          const balloon = document.createElement("div");
+          balloon.classList.add("balloon");
+
+          const randomLeft = Math.floor(Math.random() * 80) + 10;
+          const randomDuration = Math.floor(Math.random() * 5) + 6;
+          const randomDelay = Math.floor(Math.random() * 5);
+
+          balloon.style.left = randomLeft + "%";
+          balloon.style.backgroundColor = colors[index % colors.length];
+          balloon.style.animationDuration = randomDuration + "s";
+          balloon.style.animationDelay = "-" + randomDelay + "s";
+
+          const styleSheet = document.createElement("style");
+          styleSheet.innerHTML = `.balloon:nth-child(${index+2})::before { border-bottom-color: ${colors[index % colors.length]}; }`;
+          document.head.appendChild(styleSheet);
+
+          balloon.onclick = () => {
+            popBalloon(balloon);
+          };
+
+          balloonContainer.appendChild(balloon);
+        });
+      }
+
+      function popBalloon(element) {
+        element.style.transform = "scale(1.2)";
+        element.style.opacity = "0";
+        setTimeout(() => element.remove(), 200);
+        const text = reasons[currentReasonIndex];
+        reasonContent.innerText = text;
+        reasonModal.style.display = "flex";
+        currentReasonIndex++;
+        poppedCount++;
+      }
+
+      function closeReason() {
+        reasonModal.style.display = "none";
+        if (poppedCount === reasons.length) {
+          startProposal();
+        }
+      }
+
+      function startProposal() {
+        balloonContainer.style.opacity = "0";
+        setTimeout(() => {
+          balloonContainer.style.display = "none";
+          mainProposal.style.display = "flex";
+          setTimeout(() => {
+            mainProposal.style.opacity = "1";
+          }, 50);
+        }, 500);
+      }
+
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+        toast.innerText = message;
+        toast.className = "show";
+        setTimeout(() => {
+          toast.className = toast.className.replace("show", "");
+        }, 3000);
+      }
+
+      function angry() {
+        document.getElementById("mainImg").src = "https://github.com/NikhilMarko03/resources/blob/main/sad1.gif?raw=true";
+      }
+
+      function happy() {
+        document.getElementById("mainImg").src = "https://github.com/NikhilMarko03/resources/blob/main/happy3.gif?raw=true";
+      }
+
+      function normal() {
+        document.getElementById("mainImg").src = "https://github.com/NikhilMarko03/resources/blob/main/happy1.gif?raw=true";
+      }
+
+      function resetButtons() {
+        const container = document.getElementById("modal-btn-container");
+        container.innerHTML = `
+            <button class="button" onclick="yes()">Yes 😽</button>
+            <button class="button" onclick="no()">No 😭</button>
+        `;
+      }
+
+      function no() {
+        resetButtons();
+        const model = document.getElementById("model");
+        model.style.display = "flex";
+        document.getElementById("modelImg").src = sadCat[Math.floor(Math.random() * sadCat.length)];
+        document.getElementById("modelText").innerText = blackmail[Math.floor(Math.random() * blackmail.length)];
+      }
+
+      function maybe() {
+        const model = document.getElementById("model");
+        const container = document.getElementById("modal-btn-container");
+        model.style.display = "flex";
+        document.getElementById("modelImg").src = suspiciousCat[Math.floor(Math.random() * suspiciousCat.length)];
+        document.getElementById("modelText").innerText = "Yeh sochna padd raha h? 👀";
+        container.innerHTML = `
+            <button class="button" onclick="refreshSuspicious()">Haaaaaaa 😮‍💨</button>
+            <button class="button" onclick="closeMaybe()">Soch liya 😏</button>
+        `;
+      }
+
+      function refreshSuspicious() {
+        const img = document.getElementById("modelImg");
+        let newSrc = suspiciousCat[Math.floor(Math.random() * suspiciousCat.length)];
+        while (newSrc === img.src && suspiciousCat.length > 1) {
+          newSrc = suspiciousCat[Math.floor(Math.random() * suspiciousCat.length)];
+        }
+        img.src = newSrc;
+      }
+
+      function closeMaybe() {
+        const model = document.getElementById("model");
+        model.style.display = "none";
+        resetButtons();
+      }
+
+      function yes() {
+        document.getElementById("model").style.display = "none";
+        document.getElementById("model2").style.display = "flex";
+        document.getElementById("btns").style.display = "none";
+        document.getElementById("wedate").innerText = "We are a couple now ❤️😁 \n Hehehe 😽";
+      }
+
+      function ly2() {
+        document.getElementById("model2").style.display = "none";
+        showToast("Hehe.. kitne acche pics thae na ❤️👻");
+      }
+
+      let flownCount = 0;
+      const photosToFly = 4;
+
+      function fly(element) {
+        element.classList.add('fly-away');
+        flownCount++;
+        if (flownCount === photosToFly) {
+          setTimeout(() => {
+            document.getElementById("final-btn").classList.add("show");
+          }, 800);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        createBalloons();
+      });
+
+    </script>
+  </body>
+
+</html>
+
+<!--In case you are looking at this code .. I am impressed 👀❤️-->
+<!--I really enjoyed making this and surprising you my meowwww 😽-->
+<!--But I don't think you will ever read this 😭-->
